@@ -45,7 +45,7 @@
  *                             device driver example
  *
  * Sep 13, 2011 Andy Willis    HLT version
- * Jun 11, 2014 Tobias Karnat  HLT16 version
+ * Jul 01, 2014 Tobias Karnat  HLT16 version
  */
 
 #include <devhdr.h>
@@ -54,7 +54,7 @@
 // Declare strategy entry points that are located in other source files
 //
 // StratInit  - Initialization entry point [Init.c]
-// StratIOCtl - Audio IOCtl interface [IOCtl.c]
+// StratIOCtl - HLT IOCtl interface [IOCtl.c]
 
 extern uint16_t StratInit(REQP_INIT FAR *rp);
 extern uint16_t StratIOCtl(REQP_HEADER FAR* rp);
