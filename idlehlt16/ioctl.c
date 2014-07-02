@@ -31,21 +31,23 @@
  * Sep 30, 94  David Bollo    Initial version
  * Jun 30, 07  M Greene <greenemk@cox.net>
  * Sep 12, 11  Andy Willis    HLT version
- * Jun 11, 14  Tobias Karnat  HLT16 version
+ * Jul 01, 14  Tobias Karnat  HLT16 version
  */
-
 
 #include <devhdr.h>
 #include <devreqp.h>
 #include <devtypes.h>
 
+void IntEnableHLT( );
+#pragma aux IntEnableHLT = \
+    "sti" \
+    "hlt" \
+    modify exact [];
+
 // Dispatch IOCtl requests received from the Strategy routine
 uint16_t StratIOCtl(REQP_HEADER FAR* rp)
 {
-    __asm {
-        sti
-        hlt
-    }
+    IntEnableHLT();
 
     rp->status = RPDONE;
     return RPDONE;

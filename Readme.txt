@@ -1,6 +1,6 @@
 HLTDriver 16-Bit
 
-This driver is intended to keep systems cooler by calling HLT without having to patch the kernel.
+This driver is intended to keep systems cooler by calling HLT.
 
 Original Author       : Andy Willis
 Modified for OS/2 1.x : Tobias Karnat
