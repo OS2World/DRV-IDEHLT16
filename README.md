@@ -10,7 +10,7 @@ LICENSE
 
 COMPILE TOOLS
 ===============
-* 
+* Open Watcom C/C++ 1.9
 
 AUTHORS
 ===============
