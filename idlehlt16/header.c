@@ -20,21 +20,18 @@
 **    Copyright statement and Disclaimer of Warranties may not be       **
 **    removed.                                                          **
 **                                                                      **
-*************************************************************************/
+\************************************************************************/
 
 /* Header.c
  *
  * Device driver header
  *
- * Note that the Watcom compiler does not currently support the data_seg
- * pragma correctly, so until proper support is added, this file is
- * superseded by Header.asm.
- *
  * History:
  *
  * Sep 30, 94  David Bollo    Initial version
- * Jun 30, 07  M Greene <greenemk@cox.net>
+ * Jul 02, 07  Mike Greene    Modified for Open Watcom
  * Sep 12, 11  Andy Willis    HLT version
+ * Jul 06, 14  Tobias Karnat  HLT16 version
  */
 
 #include <devhdr.h>
