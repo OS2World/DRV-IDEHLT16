@@ -41,8 +41,8 @@
  *
  * Sep 30, 94  David Bollo    Initial version
  * Jul 02, 07  Mike Greene    Modified for Open Watcom
- * Sep 12, 11  Andy Willis    HLT version
- * Jul 06, 14  Tobias Karnat  HLT16 version
+ * Sep 13, 11  Andy Willis    HLT version
+ * Jul 09, 14  Tobias Karnat  HLT16 version
  */
 
 #include <devhdr.h>
