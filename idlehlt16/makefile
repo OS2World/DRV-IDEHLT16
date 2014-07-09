@@ -1,32 +1,24 @@
-# -ms     small memory model (small code/small data)
-# -5      optimize for Pentium
-# -omi
-#     o   control optimization
-#     m   generate inline code for math functions
-#     i   expand intrinsic functions inline
-# -s      remove stack overflow checks
-# -zdp    DS is pegged to DGROUP
-# -zff    FS floats i.e. not fixed to a segment
-# -zgf    GS floats i.e. not fixed to a segment
-# -zu     SS != DGROUP (i.e., don't assume stack is in your data segment)
-# -zl     remove default library information
-# -zq     operate quietly (equivalent to -q)
-# -wx     set warning level to maximum setting
+# -bt=os2    = Build target OS is OS/2
+# -3         = Enable use of 80386 instructions   Optimize for 386 
+# -o         = Optimization
+#              r = optimize for 80486 and Pentium pipes
+# -s         = Omit stack size checking from start of each function
+# -zl        = Place no library references into objects
+# -zq        = Operate quietly
+# -wx        = Warning level set to maximum
 
-OS21_H    = $(%WATCOM)\h;$(%WATCOM)\h\os21x
-INCLUDE16 = $(OS21_H);.\include
-C16FLAGS  = -i=$(INCLUDE16) -bt=os2 -ms -5 -omi -s -zdp -zff -zgf -zu -zl -zq -wx
-WC16      = wcc $(C16FLAGS)
-LD16FLAG  = op prot,map,st=0
+OS21_H  = $(%WATCOM)\h;$(%WATCOM)\h\os21x
+INCLUDE = $(OS21_H);.\include
 
-ASM       = wasm
-LD        = wlink
-
-.c.obj:   .AUTODEPEND
-  $(WC16) $*.c
+ASM     = wasm
+WC      = wcc
+LD      = wlink
 
 .asm.obj: .AUTODEPEND
   $(ASM) $*.asm
+
+.c.obj:   .AUTODEPEND
+  $(WC) -i=$(INCLUDE) -bt=os2 -3 -or -s -zl -zq -wx $*.c
 
 OBJS = devsegs.obj header.obj init.obj strategy.obj ioctl.obj
 
@@ -35,10 +27,11 @@ SEGS = seg type DATA SHARED PRELOAD, '_TEXT' PRELOAD IOPL, '_INITCODE' PRELOAD I
 all: idlehlt.sys idlehlt.exe .SYMBOLIC
 
 idlehlt.sys: $(OBJS)
-  $(LD) name idlehlt.sys sys os2_dll initg $(LD16FLAG) lib os2 $(SEGS) FILE {$(OBJS)}
+  $(LD) name idlehlt.sys sys os2_dll initg op prot,st=0 lib os2 $(SEGS) FILE {$(OBJS)}
 
 idlehlt.exe:
-  wcl -i=$(OS21_H) -bcl=os2 idlehlt.c
+  $(WC) -i=$(INCLUDE) -bt=os2 -3 -or -s -zq -wx idlehlt.c
+  $(LD) name idlehlt.exe sys os2 op prot,el FILE idlehlt.obj
 
 clean:    .SYMBOLIC
 CLEANEXT = sys exe obj err lnk sym lst map lib
