@@ -22,23 +22,16 @@
 **                                                                      **
 \************************************************************************/
 
-/*
- * Init.c
+/* Init.c
  *
  * Device driver initialization
  *
- * Note that the initialization code is discardable, so normally this
- * module would start with the code_seg and data_seg pragmas.  However,
- * Watcom C++ 10 currently handles these pragmas incorrectly, so for now
- * this code and data will stay resident.
- *
  * History:
  *
- * Sep 30, 94   David Bollo    Initial version
- *
- * Jul 02, 2007 M Greene       Modified for Open Watcom use as hello world
- *                             device driver example
- * Sep 11, 2011 Andy Willis    Modified hello world to call HLT
+ * Sep 30, 94  David Bollo    Initial version
+ * Jul 02, 07  Mike Greene    Modified for Open Watcom
+ * Sep 12, 11  Andy Willis    HLT version
+ * Jul 06, 14  Tobias Karnat  HLT16 version
  */
 
 #include <os2.h>
@@ -60,7 +53,7 @@ extern ULONG  DevHlp;  // DevHelp Interface Address
 // Sign on and installation messages
 static const char WELCOME[] =
     "\r\n"
-    "HLT Driver Installed.\r\n";
+    "HLT Driver installed.\r\n";
 const int WELCOME_LENGTH = sizeof(WELCOME) - 1;
 
 // Initialize device driver

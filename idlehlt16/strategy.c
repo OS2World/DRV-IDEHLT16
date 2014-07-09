@@ -40,12 +40,9 @@
  * History:
  *
  * Sep 30, 94  David Bollo    Initial version
- *
- * Jul 02, 2007 M Greene       Modified for Open Watcom use as hello world
- *                             device driver example
- *
- * Sep 13, 2011 Andy Willis    HLT version
- * Jul 01, 2014 Tobias Karnat  HLT16 version
+ * Jul 02, 07  Mike Greene    Modified for Open Watcom
+ * Sep 12, 11  Andy Willis    HLT version
+ * Jul 06, 14  Tobias Karnat  HLT16 version
  */
 
 #include <devhdr.h>
@@ -59,12 +56,10 @@
 extern uint16_t StratInit(REQP_INIT FAR *rp);
 extern uint16_t StratIOCtl(REQP_HEADER FAR* rp);
 
-
 // Strategy entry point
 //
 // The strategy entry point must be declared according to the STRATEGY
 // calling convention, which fetches arguments from the correct registers.
-
 
 ULONG  DevHlp;  // DevHelp Interface Address
 
@@ -80,31 +75,30 @@ void Strategy( REQP_ANY FAR *rp )
 {
     // Strategy routine for device set in header.c
     if( rp->header.command < RP_END ) {
-
         switch( rp->header.command ) {
+            case RP_INIT:
+                StratInit( (REQP_INIT FAR *)rp );
+                break;
 
-        case RP_INIT:
-            StratInit( (REQP_INIT FAR *)rp );
-            break;
+            case RP_IOCTL:
+                StratIOCtl( (REQP_HEADER FAR *)rp );
+                break;
 
-        case RP_IOCTL:
-            StratIOCtl( (REQP_HEADER FAR *)rp );
-            break;
+            case RP_OPEN:
+            case RP_CLOSE:
+            case RP_READ:
+            case RP_WRITE:
+            case RP_READ_NO_WAIT:
+            case RP_INPUT_STATUS:
+            case RP_INPUT_FLUSH:
+            case RP_WRITE_VERIFY:
+            case RP_OUTPUT_STATUS:
+            case RP_OUTPUT_FLUSH:
+                StratNoOp( (REQP_HEADER FAR *)rp );
+                break;
 
-        case RP_OPEN:
-        case RP_CLOSE:
-        case RP_READ:
-        case RP_WRITE:
-        case RP_READ_NO_WAIT:
-        case RP_INPUT_STATUS:
-        case RP_INPUT_FLUSH:
-        case RP_WRITE_VERIFY:
-        case RP_OUTPUT_STATUS:
-        case RP_OUTPUT_FLUSH:
-            StratNoOp( (REQP_HEADER FAR *)rp );
-            break;
-        default:
-            rp->header.status = RPERR_COMMAND | RPDONE;
+            default:
+                rp->header.status = RPERR_COMMAND | RPDONE;
         }
     } else {
         rp->header.status = RPERR_COMMAND | RPDONE;

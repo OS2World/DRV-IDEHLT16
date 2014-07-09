@@ -1,43 +1,62 @@
-/*************************************************************************
+/***************************************************\
+**                                                 **
+**  idlehlt.exe                                    **
+**                                                 **
+**  A program to communicate with the HLT driver.  **
+**                                                 **
+**  License: Public Domain                         **
+**                                                 **
+\***************************************************/
+
+/* History:
  *
- * idlehlt.exe
- *
- * A program to communicate with the HLT driver.
- *
+ * Jul 02, 07  Mike Greene    Initial version
+ * Sep 12, 11  Andy Willis    HLT version
+ * Jul 06, 14  Tobias Karnat  HLT16 version
  */
 
-#define INCL_DOSFILEMGR          /* File Manager values */
+#define INCL_DOSFILEMGR    /* File Manager values */
 #define INCL_DOSPROCESS
-#define INCL_DOSERRORS           /* DOS Error values    */
+#define INCL_DOSERRORS     /* DOS Error values    */
 #define INCL_DOSDEVICES
 #define INCL_DOSDEVIOCTL
+#define INCL_DOSSIGNALS
+
 #include <os2.h>
 #include <stdio.h>
 #include <string.h>
+#include <signal.h>
 
+volatile int exitWhile = FALSE;
 
-int main( )
+void BrkHandler( int sig_num )
+{
+    exitWhile = TRUE;
+}
+
+void main( )
 {
     USHORT rc;
     USHORT usAction     = 0;
     HFILE  hfFileHandle = 0;
 
+    signal(SIGINT, BrkHandler);
+    signal(SIGTERM, BrkHandler);
+    signal(SIGBREAK, BrkHandler);
+
     DosSetPrty(PRTYS_PROCESS, PRTYC_IDLETIME, 0, 0);
 
-    rc = DosOpen( "Idlehlt$",
+    rc = DosOpen("Idlehlt$",
               &hfFileHandle,
               &usAction,
               0L,
-              FILE_NORMAL, FILE_OPEN, OPEN_SHARE_DENYNONE, 0L );
+              FILE_NORMAL, FILE_OPEN, OPEN_SHARE_DENYNONE, 0L);
 
-    if( rc == 0 )
-    {
-        while (1)
-        {
-            rc = DosDevIOCtl(NULL,NULL,0x01,0x91,hfFileHandle);
-        }
+    if(!rc) {
+        while(!exitWhile)
+            DosDevIOCtl(NULL, NULL, 0x01, 0x91, hfFileHandle);
+        DosClose(hfFileHandle);
+    } else {
+        printf("HLT Driver not installed? [SYS%04u]\n", rc);
     }
-
-    rc = DosClose(hfFileHandle);
-    return rc;
 }
