@@ -31,7 +31,7 @@
  * Sep 30, 94  David Bollo    Initial version
  * Jul 02, 07  Mike Greene    Modified for Open Watcom
  * Sep 13, 11  Andy Willis    HLT version
- * Jul 09, 14  Tobias Karnat  HLT16 version
+ * Jul 13, 14  Tobias Karnat  HLT16 version
  */
 
 #include <os2.h>

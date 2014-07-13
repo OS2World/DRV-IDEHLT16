@@ -1,6 +1,7 @@
 # -bt=os2    = Build target OS is OS/2
 # -3         = Enable use of 80386 instructions   Optimize for 386 
 # -o         = Optimization
+#              h = repeated optimizations
 #              r = optimize for 80486 and Pentium pipes
 # -s         = Omit stack size checking from start of each function
 # -zl        = Place no library references into objects
@@ -18,7 +19,7 @@ LD      = wlink
   $(ASM) $*.asm
 
 .c.obj:   .AUTODEPEND
-  $(WC) -i=$(INCLUDE) -bt=os2 -3 -or -s -zl -zq -wx $*.c
+  $(WC) -i=$(INCLUDE) -bt=os2 -3 -ohr -s -zl -zq -wx $*.c
 
 OBJS = devsegs.obj header.obj init.obj strategy.obj ioctl.obj
 
@@ -31,7 +32,7 @@ idlehlt.sys: $(OBJS)
 
 idlehlt.exe:
   $(WC) -i=$(INCLUDE) -bt=os2 -3 -or -s -zq -wx idlehlt.c
-  $(LD) name idlehlt.exe sys os2 op prot,el FILE idlehlt.obj
+  $(LD) name idlehlt.exe sys os2 op prot,el,st=2k FILE idlehlt.obj
 
 clean:    .SYMBOLIC
 CLEANEXT = sys exe obj err lnk sym lst map lib
