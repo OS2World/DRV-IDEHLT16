@@ -4,6 +4,7 @@
 #              h = repeated optimizations
 #              r = optimize for 80486 and Pentium pipes
 # -s         = Omit stack size checking from start of each function
+# -zu        = Do not assume that SS contains segment of DGROUP
 # -zl        = Place no library references into objects
 # -zq        = Operate quietly
 # -wx        = Warning level set to maximum
@@ -19,7 +20,7 @@ LD      = wlink
   $(ASM) $*.asm
 
 .c.obj:   .AUTODEPEND
-  $(WC) -i=$(INCLUDE) -bt=os2 -3 -ohr -s -zl -zq -wx $*.c
+  $(WC) -i=$(INCLUDE) -bt=os2 -3 -ohr -s -zu -zl -zq -wx $*.c
 
 OBJS = devsegs.obj header.obj init.obj strategy.obj ioctl.obj
 
