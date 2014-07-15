@@ -2,6 +2,7 @@
 # -3         = Enable use of 80386 instructions   Optimize for 386 
 # -o         = Optimization
 #              h = repeated optimizations
+#              i = enable inline intrinsic functions
 #              r = optimize for 80486 and Pentium pipes
 # -s         = Omit stack size checking from start of each function
 # -zu        = Do not assume that SS contains segment of DGROUP
@@ -32,7 +33,7 @@ idlehlt.sys: $(OBJS)
   $(LD) name idlehlt.sys sys os2_dll initg op prot,st=0 lib os2 $(SEGS) FILE {$(OBJS)}
 
 idlehlt.exe:
-  $(WC) -i=$(INCLUDE) -bt=os2 -3 -or -s -zq -wx idlehlt.c
+  $(WC) -i=$(INCLUDE) -bt=os2 -3 -ohir -s -zq -wx idlehlt.c
   $(LD) name idlehlt.exe sys os2 op prot,el,st=2k FILE idlehlt.obj
 
 clean:    .SYMBOLIC
