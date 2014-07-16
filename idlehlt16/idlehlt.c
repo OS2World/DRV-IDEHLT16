@@ -12,7 +12,7 @@
  *
  * Jul 02, 07  Mike Greene    Initial version
  * Sep 13, 11  Andy Willis    HLT version
- * Jul 13, 14  Tobias Karnat  HLT16 version
+ * Jul 15, 14  Tobias Karnat  HLT16 version
  */
 
 #define INCL_DOSDEVICES
@@ -52,14 +52,15 @@ void main( )
             DosDevIOCtl(NULL, NULL, 0x01, 0x91, FileHandle);
         DosClose(FileHandle);
     } else {
-        char buf[6];
-        char Message[35] = "HLT Driver not installed? rc=";
-        const char Newline[2] = {'\r', '\n'};
+        int len;
+        char buf[6], Message[36] = "HLT Driver not installed? rc=";
 
         utoa(rc, buf, 10);
         strcat(Message, buf);
+        len = strlen(Message);
+        Message[len] = '\r';
+        Message[len+1] = '\n';
 
-        DosWrite(STDERR_FILENO, &Message, strlen(Message), &Action);
-        DosWrite(STDERR_FILENO, &Newline, 2, &Action);
+        DosWrite(STDERR_FILENO, &Message, len+2, &Action);
     }
 }
