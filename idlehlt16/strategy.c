@@ -33,7 +33,7 @@
 **                                                                      **
 \************************************************************************/
 
-/* Strategy.c
+/* strategy.c
  *
  * Device driver strategy entry point and dispatch table
  *
@@ -42,59 +42,49 @@
  * Sep 30, 94  David Bollo    Initial version
  * Jul 02, 07  Mike Greene    Modified for Open Watcom
  * Sep 13, 11  Andy Willis    HLT version
- * Jul 15, 14  Tobias Karnat  HLT16 version
+ * Sep 21, 14  Tobias Karnat  HLT16 version
  */
 
 #include <devhdr.h>
 #include <devreqp.h>
 
-// Declare strategy entry points that are located in other source files
-//
-// StratInit  - Initialization entry point [Init.c]
-// StratIOCtl - HLT IOCtl interface [IOCtl.c]
-
-extern uint16_t StratInit(REQP_INIT FAR *rp);
-extern uint16_t StratIOCtl(REQP_HEADER FAR* rp);
-
 // Strategy entry point
 //
 // The strategy entry point must be declared according to the STRATEGY
 // calling convention, which fetches arguments from the correct registers.
-
-ULONG  DevHlp;  // DevHelp Interface Address
-
 #pragma aux STRATEGY far parm [es bx];
 #pragma aux (STRATEGY) Strategy;
 
-static void StratNoOp( REQP_HEADER FAR *rp )
+// Declare strategy entry points that are located in other source files
+//
+// StratInit  - Initialization entry point [init.c]
+// StratIOCtl - IOCtl interface [ioctl.c]
+extern uint16_t StratInit(REQP_INIT FAR *rp);
+extern uint16_t StratIOCtl(REQP_HEADER FAR* rp);
+
+ULONG  DevHlp;    // DevHelp Interface Address
+
+static void StratNoOp(REQP_HEADER FAR *rp)
 {
     rp->status = RPDONE;
 }
 
-void Strategy( REQP_ANY FAR *rp )
+void Strategy(REQP_ANY FAR *rp)
 {
     // Strategy routine for device set in header.c
-    if( rp->header.command < RP_END ) {
-        switch( rp->header.command ) {
+    if(rp->header.command < RP_END) {
+        switch(rp->header.command) {
             case RP_INIT:
-                StratInit( (REQP_INIT FAR *)rp );
+                StratInit((REQP_INIT FAR *)rp);
                 break;
 
             case RP_IOCTL:
-                StratIOCtl( (REQP_HEADER FAR *)rp );
+                StratIOCtl((REQP_HEADER FAR *)rp);
                 break;
 
             case RP_OPEN:
             case RP_CLOSE:
-            case RP_READ:
-            case RP_WRITE:
-            case RP_READ_NO_WAIT:
-            case RP_INPUT_STATUS:
-            case RP_INPUT_FLUSH:
-            case RP_WRITE_VERIFY:
-            case RP_OUTPUT_STATUS:
-            case RP_OUTPUT_FLUSH:
-                StratNoOp( (REQP_HEADER FAR *)rp );
+                StratNoOp((REQP_HEADER FAR *)rp);
                 break;
 
             default:
