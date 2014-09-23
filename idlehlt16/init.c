@@ -22,7 +22,7 @@
 **                                                                      **
 \************************************************************************/
 
-/* Init.c
+/* init.c
  *
  * Device driver initialization
  *
@@ -31,7 +31,7 @@
  * Sep 30, 94  David Bollo    Initial version
  * Jul 02, 07  Mike Greene    Modified for Open Watcom
  * Sep 13, 11  Andy Willis    HLT version
- * Jul 15, 14  Tobias Karnat  HLT16 version
+ * Sep 21, 14  Tobias Karnat  HLT16 version
  */
 
 #include <os2.h>
@@ -42,13 +42,13 @@
 #include <devreqp.h>
 #include <devaux.h>
 
-#pragma code_seg ( "_INITCODE" ) ;
-#pragma data_seg ( "_INITDATA", "INITDATA" ) ;
+#pragma code_seg ("_INITCODE");
+#pragma data_seg ("_INITDATA", "INITDATA");
 
-extern USHORT  OffFinalCS;
-extern USHORT  OffFinalDS;
+extern ULONG DevHlp;    // DevHelp Interface Address
 
-extern ULONG  DevHlp;  // DevHelp Interface Address
+extern USHORT OffFinalCS;
+extern USHORT OffFinalDS;
 
 // Sign on and installation messages
 static const char WELCOME[] =
@@ -57,7 +57,7 @@ static const char WELCOME[] =
 const int WELCOME_LENGTH = sizeof(WELCOME) - 1;
 
 // Initialize device driver
-uint16_t StratInit( REQP_INIT FAR *rp )
+uint16_t StratInit(REQP_INIT FAR *rp)
 {
     USHORT ret;
 
@@ -65,11 +65,10 @@ uint16_t StratInit( REQP_INIT FAR *rp )
 
     // Signal that we've installed successfully by setting the size of
     // our code and data segments.
-    rp->out.finalcs = FP_OFF( &OffFinalCS );    // set pointers to
-    rp->out.finalds = FP_OFF( &OffFinalDS );    //discardable code/data
+    rp->out.finalcs = FP_OFF(&OffFinalCS);    // set pointers to
+    rp->out.finalds = FP_OFF(&OffFinalDS);    // discardable code/data
 
-    DosWrite( 1, WELCOME, WELCOME_LENGTH, &ret );
+    DosWrite(1, WELCOME, WELCOME_LENGTH, &ret);
 
-    //user code
     return RPDONE;
 }

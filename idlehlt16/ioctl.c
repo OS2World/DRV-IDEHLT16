@@ -22,7 +22,7 @@
 **                                                                      **
 \************************************************************************/
 
-/* IOCtl.c
+/* ioctl.c
  *
  * Process device specific I/O commands
  *
@@ -31,13 +31,13 @@
  * Sep 30, 94  David Bollo    Initial version
  * Jul 02, 07  Mike Greene    Modified for Open Watcom
  * Sep 13, 11  Andy Willis    HLT version
- * Jul 15, 14  Tobias Karnat  HLT16 version
+ * Sep 21, 14  Tobias Karnat  HLT16 version
  */
 
 #include <devhdr.h>
 #include <devreqp.h>
 
-void IntEnableHLT( );
+static void IntEnableHLT();
 #pragma aux IntEnableHLT = \
     "sti" \
     "hlt" \

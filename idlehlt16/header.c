@@ -22,7 +22,7 @@
 **                                                                      **
 \************************************************************************/
 
-/* Header.c
+/* header.c
  *
  * Device driver header
  *
@@ -31,25 +31,24 @@
  * Sep 30, 94  David Bollo    Initial version
  * Jul 02, 07  Mike Greene    Modified for Open Watcom
  * Sep 13, 11  Andy Willis    HLT version
- * Jul 15, 14  Tobias Karnat  HLT16 version
+ * Sep 21, 14  Tobias Karnat  HLT16 version
  */
 
 #include <devhdr.h>
 #include <devreqp.h>
 
 // Ensure that the header is located at the beginning of the driver
-#pragma data_seg ( "_HEADER", "DATA" ) ;
+#pragma data_seg ("_HEADER", "DATA");
 
 // Declare the device driver header
-
-extern void Strategy( );
+extern void Strategy();
 
 DEVHEADER DDHeader = {
-    FENCE,                                       // Link to next header in chain
-    DAW_CHARACTER|DAW_OPENCLOSE|DAW_LEVEL1,      // device attribute word
-    Strategy,                                    // Entry point to strategy routine
-    0,                                           // Entry point to IDC routine
-    {"Idlehlt$"},                                // Device driver name
-    0,0,0,0,                                     // Reserved
-    CAP_NULL                                     // Capabilities bit strip (for level 3 DDs)
+    FENCE,                                     // Link to next header in chain
+    DAW_CHARACTER|DAW_OPENCLOSE|DAW_LEVEL1,    // device attribute word
+    Strategy,                                  // Entry point to strategy routine
+    0,                                         // Entry point to IDC routine
+    {"Idlehlt$"},                              // Device driver name
+    0,0,0,0,                                   // Reserved
+    CAP_NULL                                   // Capabilities bit strip (for level 3 DDs)
 };

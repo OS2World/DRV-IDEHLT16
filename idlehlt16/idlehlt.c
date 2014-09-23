@@ -12,7 +12,7 @@
  *
  * Jul 02, 07  Mike Greene    Initial version
  * Sep 13, 11  Andy Willis    HLT version
- * Jul 15, 14  Tobias Karnat  HLT16 version
+ * Sep 21, 14  Tobias Karnat  HLT16 version
  */
 
 #define INCL_DOSDEVICES
@@ -24,7 +24,6 @@
 #include <os2.h>
 #include <io.h>
 #include <stdlib.h>
-#include <string.h>
 
 static volatile int ExitWhile;
 
@@ -33,7 +32,7 @@ static void pascal far BrkHandler(USHORT sig_arg, USHORT sig_num)
     ExitWhile = TRUE;
 }
 
-void main( )
+void main()
 {
     USHORT rc, Action;
     HFILE FileHandle;
@@ -52,15 +51,16 @@ void main( )
             DosDevIOCtl(NULL, NULL, 0x01, 0x91, FileHandle);
         DosClose(FileHandle);
     } else {
-        int len;
         char buf[6], Message[36] = "HLT Driver not installed? rc=";
+        char *src = buf, *dst = &Message[29];
+        int len;
 
         utoa(rc, buf, 10);
-        strcat(Message, buf);
-        len = strlen(Message);
-        Message[len] = '\r';
-        Message[len+1] = '\n';
+        while(*dst++ = *src++);
+        len = dst - Message;
+        Message[len-1] = '\r';
+        Message[len] = '\n';
 
-        DosWrite(STDERR_FILENO, &Message, len+2, &Action);
+        DosWrite(STDERR_FILENO, Message, len+1, &Action);
     }
 }
